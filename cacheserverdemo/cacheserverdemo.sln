@@ -5,6 +5,10 @@ VisualStudioVersion = 15.0.26430.12
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "cacheserverdemo", "cacheserverdemo\cacheserverdemo.csproj", "{E9237DB5-C29F-4588-989A-1F4E8AD74178}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheServer.Contracts", "CacheServer.Contracts\CacheServer.Contracts.csproj", "{296EF0D3-B326-4E51-988A-4DE9826EE07A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CacheServer.Server", "CacheServer.Server\CacheServer.Server.csproj", "{1149B0E4-400C-48E7-A305-7688EA519406}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +19,14 @@ Global
 		{E9237DB5-C29F-4588-989A-1F4E8AD74178}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E9237DB5-C29F-4588-989A-1F4E8AD74178}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E9237DB5-C29F-4588-989A-1F4E8AD74178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{296EF0D3-B326-4E51-988A-4DE9826EE07A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{296EF0D3-B326-4E51-988A-4DE9826EE07A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{296EF0D3-B326-4E51-988A-4DE9826EE07A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{296EF0D3-B326-4E51-988A-4DE9826EE07A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1149B0E4-400C-48E7-A305-7688EA519406}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1149B0E4-400C-48E7-A305-7688EA519406}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1149B0E4-400C-48E7-A305-7688EA519406}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1149B0E4-400C-48E7-A305-7688EA519406}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

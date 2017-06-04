@@ -68,4 +68,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>"$(SolutionDir)packages\NFX.3.4.1.2\tools\gluec" "$(SolutionDir)CacheServer.Contracts/bin/Debug/CacheServer.Contracts.dll" /o out="$(SolutionDir)cacheserverdemo\GluedClients" cl-suffix="AutoClient"</PostBuildEvent>
+  </PropertyGroup>
 </Project>

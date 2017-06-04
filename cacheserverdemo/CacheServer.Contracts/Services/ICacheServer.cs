@@ -8,7 +8,8 @@ using System.Threading.Tasks;
 namespace CacheServer.Contracts.Services
 {
     [Glued]
-    public interface ICacheServer:IDisposable
+    [LifeCycle(ServerInstanceMode.Singleton)]
+    public interface ICacheServer
     {
         byte[] AddOrGetExisiting(string key, byte[] value);
         bool Remove(string key);

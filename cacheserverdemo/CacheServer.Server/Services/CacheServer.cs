@@ -1,4 +1,5 @@
 ﻿using CacheServer.Contracts.Services;
+using NFX;
 using NFX.ApplicationModel.Pile;
 using System;
 using System.Collections.Generic;
@@ -8,45 +9,133 @@ using System.Threading.Tasks;
 
 namespace CacheServer.Server.Services
 {
-    public class CacheServer : ICacheServer
+    public class CacheServer : DisposableObject,ICacheServer
     {
-        private Dictionary<string, PilePointer> keyPilePointersStore = new Dictionary<string, PilePointer>();
+        private Dictionary<string, PilePointer> _keyPilePointersStore = new Dictionary<string, PilePointer>();
         private IPile _pile;
         public NFX.OS.ManyReadersOneWriterSynchronizer RWSynchronizer;
+        public bool Running { get; set; }
 
-        public CacheServer(IPile pile)
+        public CacheServer()
         {
-            _pile = pile;
+            _pile = new DefaultPile();
+            Running = true;
         }
+
 
         public byte[] AddOrGetExisiting(string key, byte[] value)
         {
-            throw new NotImplementedException();
+            if (!getWriteLock()) return null;
+            try
+            {
+                if (_keyPilePointersStore.ContainsKey(key))
+                {
+                    return (byte[])_pile.Get(_keyPilePointersStore[key]);
+                }
+                _keyPilePointersStore.Add(key, _pile.Put(value));
+                return value;
+            }
+            finally
+            {
+                releaseWriteLock();
+            }
         }
 
         public bool Contains(string key)
         {
-            throw new NotImplementedException();
+            if (!getReadLock()) return false;
+            try
+            {
+                return _keyPilePointersStore.ContainsKey(key);
+            }
+            finally
+            {
+                releaseReadLock();
+            }
         }
 
-        public void Dispose()
+        protected override void Destructor()
         {
-            throw new NotImplementedException();
+            Running = false;
+            base.Destructor();
+            foreach (var item in _keyPilePointersStore)
+            {
+                _pile.Delete(item.Value);
+            }
         }
 
         public byte[] Get(string key)
         {
-            throw new NotImplementedException();
+            if (!getReadLock()) return null;
+            try
+            {
+                if (!_keyPilePointersStore.ContainsKey(key)) return null;
+                return (byte[])_pile.Get(_keyPilePointersStore[key]);
+            }
+            finally
+            {
+                releaseReadLock();
+            }
         }
 
         public bool Remove(string key)
         {
-            throw new NotImplementedException();
+            if (!getWriteLock()) return false;
+            try
+            {
+                if (_keyPilePointersStore.ContainsKey(key))
+                {
+                    _pile.Delete(_keyPilePointersStore[key]);
+                    _keyPilePointersStore.Remove(key);
+                    return true;
+                }
+                else return false;
+            }
+            finally
+            {
+                releaseWriteLock();
+            }
         }
 
         public void Set(string key, byte[] value)
         {
-            throw new NotImplementedException();
+            if (!getWriteLock()) return;
+            try
+            {
+                if (_keyPilePointersStore.ContainsKey(key))
+                {
+                    _pile.Put(_keyPilePointersStore[key], value);
+                }
+                else
+                {
+                    _keyPilePointersStore.Add(key, _pile.Put(value));
+                } 
+            }
+            finally
+            {
+                releaseWriteLock();
+            }
+        }
+
+
+        private bool getReadLock()
+        {
+            return RWSynchronizer.GetReadLock((_) => !this.Running);
+        }
+
+        private void releaseReadLock()
+        {
+            RWSynchronizer.ReleaseReadLock();
+        }
+
+        private bool getWriteLock()
+        {
+            return RWSynchronizer.GetWriteLock((_) => !this.Running);
+        }
+
+        private void releaseWriteLock()
+        {
+            RWSynchronizer.ReleaseWriteLock();
         }
     }
 }
