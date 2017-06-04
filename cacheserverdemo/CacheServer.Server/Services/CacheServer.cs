@@ -18,7 +18,11 @@ namespace CacheServer.Server.Services
 
         public CacheServer()
         {
-            _pile = new DefaultPile();
+            var pile = new DefaultPile();
+            pile.Configure(null);
+            // m_Pile.SegmentSize = 512 * 1024 * 1024;
+            pile.Start();
+            _pile = pile;
             Running = true;
         }
 
